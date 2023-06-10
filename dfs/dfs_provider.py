@@ -4,6 +4,17 @@ import os
 
 data = pd.read_csv("./data/txl_data.csv")
 
+def map_yoe_range(x):
+        if x < 1:
+            return "0 - 1 year"
+        elif x < 3:
+            return "1 - 3 years"
+        elif x < 5:
+            return "3 - 5 years"
+        elif x < 10:
+            return "5 - 10 years"
+        return "10+ years"
+
 class dfs_provider:
     def get_job_levels(self):
         return data['level'].unique()
@@ -45,3 +56,15 @@ class dfs_provider:
         temp_data['mapped_industry_ls'] = temp_data['mapped_industry'].str.split(', ')
         temp_data = temp_data.explode('mapped_industry_ls').copy()
         return temp_data['mapped_industry_ls'].unique()
+    
+    def get_mean_salaries_by_industry_group_by_yoe(self, industry):
+        temp_data = data.copy()
+        temp_data['mapped_industry_ls'] = temp_data['mapped_industry'].str.split(', ')
+        temp_data = temp_data.explode('mapped_industry_ls').copy()
+        mean_slr_yoe = temp_data.groupby(['mapped_industry_ls','min_year']).mean()[['min_salary', 'max_salary']]
+        mean_slr_yoe['min_salary_rd'] = mean_slr_yoe['min_salary'].apply(lambda x: np.round(x / 1000000, decimals=2))
+        mean_slr_yoe['max_salary_rd'] = mean_slr_yoe['max_salary'].apply(lambda x: np.round(x / 1000000, decimals=2))
+        mean_slr_yoe_of_ind = mean_slr_yoe.loc[industry].reset_index()
+        mean_slr_yoe_of_ind.min_year = mean_slr_yoe_of_ind.min_year.apply(map_yoe_range)
+        df = mean_slr_yoe_of_ind.groupby('min_year').mean()[['min_salary_rd', 'max_salary_rd']].reset_index()
+        return df
