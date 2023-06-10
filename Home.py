@@ -20,8 +20,8 @@ st.markdown(
     that are based on Vietnam's job markets data.
     ### Professors & Authors
     - Instructor: Mr. Tran Quoc Khanh
-    - Author 1: Mr. Tai Le
-    - Author 2: Mr. Cuong Le
+    - Author 1: Mr. Tai Le (20522216)
+    - Author 2: Mr. Cuong Le (20520146)
     ### Visit our university website
     - Visit [UIT's Homepage](https://www.uit.edu.vn/)
 """

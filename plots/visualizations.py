@@ -56,3 +56,24 @@ class visualizations:
         mean_slr_by_level_c.plotly_chart(plot)
         save_html(plot, 'luong_tb_theo_cap_bac.html')
         return mean_slr_by_level_c
+    
+    def plot_mean_salary_industry_by_yoe(self):
+      industries_arr = list(dfs.get_industries())
+      mean_slr_by_yoe_c = st.container()
+      industries_col, min_max_col = mean_slr_by_yoe_c.columns(2)
+      industry = industries_col.selectbox('Choose an industry',
+                                 industries_arr)
+      min_max = min_max_col.radio(label='Salary range', options=['Min','Max'])
+      if min_max == 'Min':
+          range_col = 'min_salary_rd'
+          range_txt = 'tối thiểu'
+      else:
+         range_col = 'max_salary_rd'
+         range_txt = 'tối đa'
+      df = dfs.get_mean_salaries_by_industry_group_by_yoe(industry=industry)
+      plot = pf.bar_plot(df=df, x='min_year', y=range_col, orientation='v',
+                                height=600, color_continuous_scale=colors.getSequentialPeach(), color='max_salary_rd', 
+                                title=f'Lương {range_txt} trung bình theo số năm kinh nghiệp Ngành nghề: {industry}',
+                                xtitle='Ngành nghề', ytitle='Mức lương trung bình (Triệu VNĐ)')
+      mean_slr_by_yoe_c.plotly_chart(plot)
+      return mean_slr_by_yoe_c
