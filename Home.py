@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 from plots.visualizations import visualizations
 
 st.set_page_config(
@@ -28,4 +29,4 @@ st.markdown(
 )
 # My classes
 
-
+# bootstrap 4 collapse example

@@ -68,3 +68,12 @@ class dfs_provider:
         mean_slr_yoe_of_ind.min_year = mean_slr_yoe_of_ind.min_year.apply(map_yoe_range)
         df = mean_slr_yoe_of_ind.groupby('min_year').mean()[['min_salary_rd', 'max_salary_rd']].reset_index()
         return df
+    
+    def get_mean_min_years_for_each_level(self, industry):
+        temp_data = data.copy()
+        temp_data['mapped_industry_ls'] = temp_data['mapped_industry'].str.split(', ')
+        temp_data = temp_data.explode('mapped_industry_ls').copy()
+        mean_min_year_by_level = temp_data[temp_data['mapped_industry_ls'] == industry].groupby('level').mean()[['min_year']].reset_index()
+        mean_min_year_by_level = mean_min_year_by_level[mean_min_year_by_level['level'].apply(lambda x: 'Quản lý' in x)].copy()
+        mean_min_year_by_level['min_year_rd'] = mean_min_year_by_level.min_year.apply(lambda x: np.round(x, 2))
+        return mean_min_year_by_level.sort_values('min_year_rd')

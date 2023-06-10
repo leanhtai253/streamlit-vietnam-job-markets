@@ -3,7 +3,8 @@ from dfs.dfs_provider import dfs_provider
 from utils.colors import colors
 from utils.save_tools import save_html
 import streamlit as st
-
+import streamlit.components.v1 as components
+import graphlib
 pf = plot_functions()
 dfs = dfs_provider()
 colors = colors()
@@ -77,3 +78,13 @@ class visualizations:
                                 xtitle='Ngành nghề', ytitle='Mức lương trung bình (Triệu VNĐ)')
       mean_slr_by_yoe_c.plotly_chart(plot)
       return mean_slr_by_yoe_c
+    
+    def plot_mean_min_years_by_level(self):
+      mean_min_years_level_c = st.container()
+      industries_arr = list(dfs.get_industries())
+      industry = mean_min_years_level_c.selectbox('Choose an industry',
+                              industries_arr)
+      df = dfs.get_mean_min_years_for_each_level(industry=industry)
+      mean_min_years_level_c.dataframe(df)
+      return mean_min_years_level_c
+    
