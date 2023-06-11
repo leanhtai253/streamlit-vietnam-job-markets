@@ -1,4 +1,5 @@
 import plotly.express as px
+import streamlit.components.v1 as components
 
 class plot_functions:
     def bar_plot(self, df, x, y, title=None, orientation=None, color=None, color_continuous_scale=None, coloraxis=False,
@@ -17,3 +18,15 @@ class plot_functions:
         mybar.update_yaxes(title=dict(text=ytitle, font=dict(size=20)), tickfont=dict(size=15))
         mybar.update_layout(title=dict(font=dict(size=25)))
         return mybar
+    
+    def mermaid(self, code: str) -> None:
+        return f"""
+            <div class="mermaid">
+                {code}
+            </div>
+
+            <script type="module">
+                import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+                mermaid.initialize({{ startOnLoad: true }});
+            </script>
+            """
