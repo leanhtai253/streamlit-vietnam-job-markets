@@ -67,9 +67,9 @@ def draw_map_vietnam_provinces(vietnam_geo,data):
         }
     return app
     
-df = pd.read_csv('../data/txl_data.csv')
-df_code = pd.read_csv('../data/provinces.csv')
-vietnam_geo = json.load(open("../utils/vietnam_state.geojson","r"))
+df = pd.read_csv('data/txl_data.csv')
+df_code = pd.read_csv('data/provinces.csv')
+vietnam_geo = json.load(open("utils/vietnam_state.geojson","r"))
 data=get_data_Q5(df,df_code)
 
 draw_map_vietnam_provinces(vietnam_geo,data).run_server()
