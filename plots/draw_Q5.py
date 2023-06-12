@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 from data_Q5 import get_data_Q5
 
 color = '#000000'
-colors = 'reds'
+colors = 'dense'
 
 
 def draw_map_vietnam_provinces(vietnam_geo,data):
@@ -44,9 +44,9 @@ def draw_map_vietnam_provinces(vietnam_geo,data):
             locations = data["Code"],
             z = data.loc[0:, selected_job],
             hovertext = 'Province: ' + data['Provinces'],
-            colorscale =colors,
-            marker_opacity=0.9,
-            marker_line_width=0.9,
+            colorscale = colors,
+            marker_opacity = 0.9,
+            marker_line_width = 0.9,
             showscale=True
             )
         layout = go.Layout(
@@ -67,9 +67,9 @@ def draw_map_vietnam_provinces(vietnam_geo,data):
         }
     return app
     
-df = pd.read_csv('data/txl_data.csv')
-df_code = pd.read_csv('data/provinces.csv')
-vietnam_geo = json.load(open("utils/vietnam_state.geojson","r"))
+df = pd.read_csv('../data/txl_data.csv')
+df_code = pd.read_csv('../data/provinces.csv')
+vietnam_geo = json.load(open("../utils/vietnam_state.geojson","r"))
 data=get_data_Q5(df,df_code)
 
 draw_map_vietnam_provinces(vietnam_geo,data).run_server()
