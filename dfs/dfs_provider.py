@@ -16,8 +16,9 @@ def map_yoe_range(x):
 
 class dfs_provider:
     data = pd.read_csv("./data/txl_data.csv")
-    city_code = pd.read_csv('./data/provinces.csv')
+    df_code = pd.read_csv("./data/provinces.csv")
     vietnam_geo = json.load(open("./data/vietnam_state.geojson","r"))
+
     def get_job_levels(self):
         return self.data['level'].unique()
     
@@ -81,7 +82,7 @@ class dfs_provider:
         mean_min_year_by_level['min_year_rd'] = mean_min_year_by_level.min_year.apply(lambda x: np.round(x, 2))
         return mean_min_year_by_level.sort_values('min_year_rd').reset_index(drop=True)
     
-    def get_mean_salary_by_province(self):
+    def get_mean_salary_by_provinces(self):
         map = pd.DataFrame()
         map['industry_list'] = [x.split(', ') for x in self.data['mapped_industry']]
         map['average'] = [(x+y)/2 for x, y in zip(self.data['min_salary'],self.data['max_salary'])]
@@ -90,7 +91,7 @@ class dfs_provider:
         map['average'] = [round(x,-5) for x in map['average']]
 
         lst = list(set(map['industry_list']))
-        output = self.city_code.copy()
+        output = self.df_code.copy()
         for x in lst:
             filter = map.loc[map['industry_list'] == x]
             filter.drop(columns = ['industry_list'], inplace=True)

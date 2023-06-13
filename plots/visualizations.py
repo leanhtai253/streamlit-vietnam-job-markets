@@ -4,10 +4,15 @@ from utils.colors import colors
 from utils.save_tools import save_html
 import streamlit as st
 import streamlit.components.v1 as components
+import json
+import pandas as pd
+import plotly.express as px
 import plotly.graph_objects as go
+
 pf = plot_functions()
 dfs = dfs_provider()
 colors = colors()
+
 
 all_levels_label = 'Tất cả cấp bậc'
 all_industries_label = 'Tất cả ngành nghề'
@@ -19,7 +24,6 @@ class visualizations:
                                x='count', y='industry', orientation='h', color='count',
                                color_continuous_scale=colors.getSequentialPeach(), 
                                height=1200, ytitle='Ngành nghề', xtitle='Số lượng công việc')
-        save_html(plot, "phan_bo_nganh_nghe.html")
         industry_count_c.plotly_chart(plot)
     
     def plot_mean_salary_industry_by_level(self):
@@ -55,7 +59,6 @@ class visualizations:
                                 title=f'Lương {range_txt} trung bình Cấp bậc: {level} / Ngành nghề: {industry}',
                                 xtitle='Ngành nghề', ytitle='Mức lương trung bình (Triệu VNĐ)')
         mean_slr_by_level_c.plotly_chart(plot)
-        save_html(plot, 'luong_tb_theo_cap_bac.html')
         return mean_slr_by_level_c
     
     def plot_mean_salary_industry_by_yoe(self):
@@ -87,17 +90,27 @@ class visualizations:
       df = dfs.get_mean_min_years_for_each_level(industry=industry)
       mean_min_years_level_c.dataframe(df)
       return mean_min_years_level_c
+   
+    def plot_mean_salary_by_provinces(self):
+      vietnam_geo = json.load(open("data/vietnam_state.geojson","r"))
+      data = dfs.get_mean_salary_by_provinces()
 
-    def plot_mean_salary_by_province(self):
-      mean_slr_by_prov_c = st.container()
-      industries_arr = list(dfs.get_industries())
-      selected_job = mean_slr_by_prov_c.selectbox('Choose an industry',
-                              industries_arr)
-      vietnam_geo = dfs.vietnam_geo
-      data = dfs.get_mean_salary_by_province()
-      plot = pf.map_plot(geojson=vietnam_geo, locations=data['Code'], z = data.loc[0:, selected_job],
-                         hover_provinces='Province: ' + data['Provinces'], colorscale=colors.getSequentialPeach(),
-                         title=f'Lương trung bình của ngành {selected_job} theo tỉnh/thành')
-      mean_slr_by_prov_c.plotly_chart(plot)
-      return mean_slr_by_prov_c
-    
+      categories = sorted(data.columns[2:])
+      cat_options = []
+      for cat in categories:
+         cat_options.append(cat)
+      mean_salary_provinces = st.container()
+      industry = mean_salary_provinces.selectbox('Choose an industry',cat_options)
+      fig = px.choropleth_mapbox(data, geojson = vietnam_geo, locations = data.Code, color = data[industry],
+                           featureidkey = 'properties.Code',
+                           color_continuous_scale = "peach",
+                           mapbox_style = "carto-positron",
+                           zoom = 5, center = {"lat": 16, "lon": 106},
+                           opacity = 0.5,        
+                           hover_name = 'Provinces',
+                           labels= {industry: 'Mean salary ','Code': 'Province code '}            
+                          )
+      fig.update_layout(margin = {"r":0,"t":0,"l":0,"b":0}, width = 800, height = 800)
+      mean_salary_provinces.plotly_chart(fig)
+      
+      return mean_salary_provinces
