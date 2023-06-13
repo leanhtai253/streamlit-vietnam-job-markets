@@ -24,7 +24,6 @@ class visualizations:
                                x='count', y='industry', orientation='h', color='count',
                                color_continuous_scale=colors.getSequentialPeach(), 
                                height=1200, ytitle='Ngành nghề', xtitle='Số lượng công việc')
-        save_html(plot, "phan_bo_nganh_nghe.html")
         industry_count_c.plotly_chart(plot)
     
     def plot_mean_salary_industry_by_level(self):
@@ -60,7 +59,6 @@ class visualizations:
                                 title=f'Lương {range_txt} trung bình Cấp bậc: {level} / Ngành nghề: {industry}',
                                 xtitle='Ngành nghề', ytitle='Mức lương trung bình (Triệu VNĐ)')
         mean_slr_by_level_c.plotly_chart(plot)
-        save_html(plot, 'luong_tb_theo_cap_bac.html')
         return mean_slr_by_level_c
     
     def plot_mean_salary_industry_by_yoe(self):
