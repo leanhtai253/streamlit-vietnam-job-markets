@@ -97,7 +97,7 @@ class dfs_provider:
             filter.drop(columns = ['industry_list'], inplace=True)
             filter.columns = ['Provinces', x]
             
-            output = output.merge(filter, on='Provinces', how='outer', suffixes=None, indicator=True)\
+            output = output.merge(filter, on='Provinces', how='outer', indicator=True)\
                 .query('_merge!="right_only"').drop(columns=['_merge'])
         output = output.fillna(-1)
 
