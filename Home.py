@@ -9,7 +9,6 @@ st.set_page_config(
 
 st.write("# Welcome to DS103 Capstone Project 👋")
 
-st.sidebar.success("Select a demo above.")
 st.markdown(
     """
     DS103 Course from the University of Information Technology (UIT)
