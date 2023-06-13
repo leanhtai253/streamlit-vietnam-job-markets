@@ -1,6 +1,8 @@
 import plotly.express as px
 import streamlit.components.v1 as components
 import plotly.graph_objects as go
+import base64
+import streamlit as st
 
 class plot_functions:
     def bar_plot(self, df, x, y, title=None, orientation=None, color=None, color_continuous_scale=None, coloraxis=False,
@@ -19,7 +21,7 @@ class plot_functions:
         mybar.update_yaxes(title=dict(text=ytitle, font=dict(size=20)), tickfont=dict(size=15))
         mybar.update_layout(title=dict(font=dict(size=25)))
         return mybar
-    
+
     def map_plot(self, geojson, locations, z, hover_provinces, title=None, colorscale=None):
         trace = go.Choroplethmapbox(
             geojson = geojson,
@@ -49,3 +51,4 @@ class plot_functions:
             'data': [trace],
             'layout': layout
         })
+
