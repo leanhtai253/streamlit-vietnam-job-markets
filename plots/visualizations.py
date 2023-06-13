@@ -88,3 +88,9 @@ class visualizations:
       mean_min_years_level_c.dataframe(df)
       return mean_min_years_level_c
     
+    def plot_mean_salary_by_province(self):
+       df = dfs.get_mean_salary_by_province()
+       mean_slr_by_prov_c = st.container()
+       mean_slr_by_prov_c.dataframe(df)
+       return mean_slr_by_prov_c
+    
