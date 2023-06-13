@@ -1,15 +1,32 @@
 import streamlit as st
 import streamlit.components.v1 as components
 from plots.visualizations import visualizations
+import base64
 
 st.set_page_config(
     page_title="Hello",
     page_icon="👋",
 )
 
-st.write("# Welcome to DS103 Capstone Project 👋")
+@st.cache_data()
+def set_background(file):
+    with open(file, 'rb') as f:
+        data = f.read()
+    bin_str = base64.b64encode(data).decode()
+    page_bg_img = '''
+    <style>
+    .stApp {
+    background-image: url("data:image/jpg;base64,%s");
+    background-size: cover;
+    }
+    </style>
+    ''' % bin_str
+    st.markdown(page_bg_img, unsafe_allow_html=True)
 
-st.sidebar.success("Select a demo above.")
+set_background('images/background.jpg')
+
+
+st.write("# Welcome to DS103 Capstone Project 👋")
 
 st.markdown(
     """

@@ -1,5 +1,7 @@
 import plotly.express as px
 import streamlit.components.v1 as components
+import base64
+import streamlit as st
 
 class plot_functions:
     def bar_plot(self, df, x, y, title=None, orientation=None, color=None, color_continuous_scale=None, coloraxis=False,
@@ -30,3 +32,5 @@ class plot_functions:
                 mermaid.initialize({{ startOnLoad: true }});
             </script>
             """
+    
+    

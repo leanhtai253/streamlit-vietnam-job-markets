@@ -5,9 +5,18 @@ from utils.save_tools import save_html
 import streamlit as st
 import streamlit.components.v1 as components
 import graphlib
+import dash 
+import dash_core_components as dcc
+import dash_html_components as html
+from dash.dependencies import Input, Output
+import json
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 pf = plot_functions()
 dfs = dfs_provider()
 colors = colors()
+
 
 all_levels_label = 'Tất cả cấp bậc'
 all_industries_label = 'Tất cả ngành nghề'
@@ -87,4 +96,27 @@ class visualizations:
       df = dfs.get_mean_min_years_for_each_level(industry=industry)
       mean_min_years_level_c.dataframe(df)
       return mean_min_years_level_c
-    
+   
+    def plot_mean_salary_by_provinces(self):
+      vietnam_geo = json.load(open("data/vietnam_state.geojson","r"))
+      data = dfs.get_mean_salary_by_provinces()
+
+      categories = sorted(data.columns[2:])
+      cat_options = []
+      for cat in categories:
+         cat_options.append(cat)
+      mean_salary_provinces = st.container()
+      industry = mean_salary_provinces.selectbox('Choose an industry',cat_options)
+      fig = px.choropleth_mapbox(data, geojson = vietnam_geo, locations = data.Code, color = data[industry],
+                           featureidkey = 'properties.Code',
+                           color_continuous_scale = "peach",
+                           mapbox_style = "carto-positron",
+                           zoom = 5, center = {"lat": 16, "lon": 106},
+                           opacity = 0.5,        
+                           hover_name = 'Provinces',
+                           labels= {industry: 'Mean salary ','Code': 'Province code '}            
+                          )
+      fig.update_layout(margin = {"r":0,"t":0,"l":0,"b":0}, width = 800, height = 800)
+      mean_salary_provinces.plotly_chart(fig)
+      
+      return mean_salary_provinces
