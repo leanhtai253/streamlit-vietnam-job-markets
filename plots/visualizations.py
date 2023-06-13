@@ -4,7 +4,7 @@ from utils.colors import colors
 from utils.save_tools import save_html
 import streamlit as st
 import streamlit.components.v1 as components
-import graphlib
+import plotly.graph_objects as go
 pf = plot_functions()
 dfs = dfs_provider()
 colors = colors()
@@ -87,10 +87,17 @@ class visualizations:
       df = dfs.get_mean_min_years_for_each_level(industry=industry)
       mean_min_years_level_c.dataframe(df)
       return mean_min_years_level_c
-    
+
     def plot_mean_salary_by_province(self):
-       df = dfs.get_mean_salary_by_province()
-       mean_slr_by_prov_c = st.container()
-       mean_slr_by_prov_c.dataframe(df)
-       return mean_slr_by_prov_c
+      mean_slr_by_prov_c = st.container()
+      industries_arr = list(dfs.get_industries())
+      selected_job = mean_slr_by_prov_c.selectbox('Choose an industry',
+                              industries_arr)
+      vietnam_geo = dfs.vietnam_geo
+      data = dfs.get_mean_salary_by_province()
+      plot = pf.map_plot(geojson=vietnam_geo, locations=data['Code'], z = data.loc[0:, selected_job],
+                         hover_provinces='Province: ' + data['Provinces'], colorscale=colors.getSequentialPeach(),
+                         title=f'Lương trung bình của ngành {selected_job} theo tỉnh/thành')
+      mean_slr_by_prov_c.plotly_chart(plot)
+      return mean_slr_by_prov_c
     

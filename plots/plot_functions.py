@@ -1,5 +1,6 @@
 import plotly.express as px
 import streamlit.components.v1 as components
+import plotly.graph_objects as go
 
 class plot_functions:
     def bar_plot(self, df, x, y, title=None, orientation=None, color=None, color_continuous_scale=None, coloraxis=False,
@@ -19,14 +20,32 @@ class plot_functions:
         mybar.update_layout(title=dict(font=dict(size=25)))
         return mybar
     
-    def mermaid(self, code: str) -> None:
-        return f"""
-            <div class="mermaid">
-                {code}
-            </div>
-
-            <script type="module">
-                import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-                mermaid.initialize({{ startOnLoad: true }});
-            </script>
-            """
+    def map_plot(self, geojson, locations, z, hover_provinces, title=None, colorscale=None):
+        trace = go.Choroplethmapbox(
+            geojson = geojson,
+            featureidkey= 'properties.Code',
+            locations = locations,
+            z = z,
+            hovertext = hover_provinces,
+            colorscale = colorscale,
+            marker_opacity=0.9,
+            marker_line_width=0.9,
+            showscale=True
+        )
+        layout = go.Layout(
+            title=title,
+            height=900,
+            width=900,  
+            mapbox=dict(
+            style='white-bg',
+            center=dict(
+                lat=17,  
+                lon=106 
+            ),
+            zoom=4.5
+            ),
+        )
+        return ({
+            'data': [trace],
+            'layout': layout
+        })
