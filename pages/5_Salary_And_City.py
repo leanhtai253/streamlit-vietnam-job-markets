@@ -4,6 +4,6 @@ from plots.visualizations import visualizations
 my_plots = visualizations()
 
 # Title
-st.title("Số năm kinh nghiệm tối thiểu trung bình cho từng vị trí")
+st.title("Tương quan giữa tiền lương và khu vực")
 
-my_plots.plot_mean_min_years_by_level()
+my_plots.plot_mean_salary_by_province()
