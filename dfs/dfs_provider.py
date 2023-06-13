@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 
-data = pd.read_csv("./data/txl_data.csv")
+data = pd.read_csv("./data/txl_data.csv", index_col=0)
 
 def map_yoe_range(x):
         if x < 1:
