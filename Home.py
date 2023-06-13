@@ -1,6 +1,7 @@
 import streamlit as st
 import streamlit.components.v1 as components
 from plots.visualizations import visualizations
+from dfs.dfs_provider import dfs_provider
 
 st.set_page_config(
     page_title="Hello",
@@ -10,7 +11,7 @@ st.set_page_config(
 st.write("# Welcome to DS103 Capstone Project 👋")
 
 st.sidebar.success("Select a demo above.")
-
+st.dataframe(dfs_provider().data)
 st.markdown(
     """
     DS103 Course from the University of Information Technology (UIT)

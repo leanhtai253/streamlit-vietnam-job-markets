@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import os
+import streamlit as st
 
 def map_yoe_range(x):
         if x < 1:
@@ -29,10 +30,14 @@ class dfs_provider:
         temp_data = self.data.copy()
         temp_data['mapped_industry_ls'] = temp_data['mapped_industry'].str.split(', ')
         temp_data = temp_data.explode('mapped_industry_ls').copy()
-        mean_slr_by_level = temp_data.groupby(['mapped_industry_ls', 'level']).mean()[['min_salary', 'max_salary']].reset_index()
-        mean_slr_by_level['min_salary_rd'] = mean_slr_by_level['min_salary'].apply(lambda x: np.round(x / 1000000, decimals=2))
-        mean_slr_by_level['max_salary_rd'] = mean_slr_by_level['max_salary'].apply(lambda x: np.round(x / 1000000, decimals=2))
-        return mean_slr_by_level[mean_slr_by_level['level'] == level].reset_index(drop=True)
+        try:
+            mean_slr_by_level = temp_data.groupby(['mapped_industry_ls', 'level']).mean()[['min_salary', 'max_salary']].reset_index()
+            mean_slr_by_level['min_salary_rd'] = mean_slr_by_level['min_salary'].apply(lambda x: np.round(x / 1000000, decimals=2))
+            mean_slr_by_level['max_salary_rd'] = mean_slr_by_level['max_salary'].apply(lambda x: np.round(x / 1000000, decimals=2))
+            return mean_slr_by_level[mean_slr_by_level['level'] == level].reset_index(drop=True)
+        except Exception as e:
+            print(e)
+            st.dataframe(temp_data)
     
     def get_mean_salaries(self):
         temp_data = self.data.copy()
